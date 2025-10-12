@@ -1,3 +1,10 @@
+# fvm
+.fvm/flutter_sdk
+
+# firebase
+/lib/firebase_options.dart
+firebase.json
+
 # Miscellaneous
 *.class
 *.log
@@ -43,4 +50,3 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
-.fvm/flutter_sdk
