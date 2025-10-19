@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:tiktok_clone/features/authentication/signup_screen.dart';
 import 'package:tiktok_clone/firebase_options.dart';
 
 void main() async {
@@ -21,12 +22,13 @@ class TikTokApp extends StatelessWidget {
       title: 'TikTok clone',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0xFFE9435A),
-        ),
+        // colorScheme: ColorScheme.fromSeed(
+        //   seedColor: const Color(0xFFE9435A),
+        // ),
+        primaryColor: const Color(0xFFE9435A),
         useMaterial3: true,
       ),
-      home: Scaffold(),
+      home: SignUpScreen(),
     );
   }
 }
