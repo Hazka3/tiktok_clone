@@ -86,10 +86,10 @@ class _UserNameScreenState extends State<UserNameScreen> {
               ),
             ),
             Gaps.v16,
-            GestureDetector(
-              // AuthButton のようにFunction? constructorをつくっておく
+            FormButton(
+              "Next",
               onTap: _onNextTap,
-              child: FormButton(disabled: _username.isEmpty),
+              disabled: _username.isEmpty,
             ),
           ],
         ),

@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
 
 class FormButton extends StatelessWidget {
+  final String name;
   final bool disabled;
   final VoidCallback onTap;
 
-  const FormButton({
+  const FormButton(
+    this.name, {
     super.key,
     required this.disabled,
     required this.onTap,
@@ -32,8 +34,8 @@ class FormButton extends StatelessWidget {
               color: disabled ? Colors.grey.shade400 : Colors.white,
               fontWeight: FontWeight.w600,
             ),
-            child: const Text(
-              "Next",
+            child: Text(
+              name,
               textAlign: TextAlign.center,
             ),
           ),

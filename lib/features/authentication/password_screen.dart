@@ -53,7 +53,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
       context,
     ).push(
       MaterialPageRoute(
-        builder: (context) => const BirthDayScreen(),
+        builder: (context) => const BirthdayScreen(),
       ),
     );
   }
@@ -174,6 +174,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
               ),
               Gaps.v28,
               FormButton(
+                "Next",
                 onTap: _onSubmit,
                 disabled:
                     !_isPasswordLengthValid() || !_isPasswordLettersValid(),
