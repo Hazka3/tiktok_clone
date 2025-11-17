@@ -1,9 +1,12 @@
-# fvm
+# default file
+ios/
+android/
+devtools_options.yaml
+pubspec.lock
 
 # firebase
 /lib/firebase_options.dart
 firebase.json
-/android/app/google-services.json
 
 # Miscellaneous
 *.class
@@ -46,11 +49,6 @@ app.*.symbols
 # Obfuscation related
 app.*.map.json
 
-# Android Studio will place build artifacts here
-/android/app/debug
-/android/app/profile
-/android/app/release
-
 # FVM Version Cache
 .fvm/
-ios/Runner/GoogleService-Info.plist
+.fvmrc
