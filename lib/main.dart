@@ -1,7 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
-import 'package:tiktok_clone/features/authentication/signup_screen.dart';
+import 'package:tiktok_clone/features/onboarding/interests_screen.dart';
 import 'package:tiktok_clone/firebase_options.dart';
 
 void main() async {
@@ -30,6 +30,7 @@ class TikTokApp extends StatelessWidget {
         ),
         appBarTheme: const AppBarTheme(
           elevation: 0,
+          centerTitle: true,
           foregroundColor: Colors.black,
           backgroundColor: Colors.white,
           titleTextStyle: TextStyle(
@@ -40,7 +41,7 @@ class TikTokApp extends StatelessWidget {
         ),
         useMaterial3: true,
       ),
-      home: const SignUpScreen(),
+      home: const InterestsScreen(),
     );
   }
 }
