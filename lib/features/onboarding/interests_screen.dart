@@ -8,6 +8,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:tiktok_clone/constants/gaps.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
+import 'package:tiktok_clone/features/onboarding/tutorial_screen.dart';
 import 'package:tiktok_clone/features/onboarding/widgets/interest_button.dart';
 
 // テンプレ準備
@@ -117,6 +118,15 @@ class _InterestsScreenState extends State<InterestsScreen> {
     }
   }
 
+  void _onNextTap() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const TutorialScreen(),
+      ),
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -202,27 +212,30 @@ class _InterestsScreenState extends State<InterestsScreen> {
               horizontal: Sizes.size20,
             ),
             child: _isAndroid
-                ? Container(
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).primaryColor,
-                    ),
-                    child: const Center(
-                      child: Text(
-                        "Next",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: Sizes.size16,
+                ? GestureDetector(
+                    onTap: _onNextTap,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).primaryColor,
+                      ),
+                      child: const Center(
+                        child: Text(
+                          "Next",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: Sizes.size16,
+                          ),
                         ),
                       ),
                     ),
                   )
                 : CupertinoButton(
                     color: Theme.of(context).primaryColor,
+                    onPressed: _onNextTap,
                     child: const Text(
                       "Next",
                       style: TextStyle(color: Colors.white),
                     ),
-                    onPressed: () {},
                   ),
           ),
         ),
