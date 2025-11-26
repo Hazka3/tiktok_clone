@@ -1,8 +1,9 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:tiktok_clone/common/main_navigation/main_navigation.screen.dart';
 import 'package:tiktok_clone/constants/gaps.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
+import 'package:tiktok_clone/features/onboarding/widgets/onboarding_form_button.dart';
+import 'package:tiktok_clone/utils/utils_targetPlatform.dart';
 
 enum Direction { right, left }
 
@@ -19,7 +20,7 @@ class _TutorialScreenState extends State<TutorialScreen> {
   Direction _direction = Direction.right;
   Page _showinPage = Page.first;
 
-  final bool _isAndroid = (defaultTargetPlatform == TargetPlatform.android);
+  final bool _isIos = isIos();
 
   void _onPanUpdate(DragUpdateDetails details) {
     if (details.delta.dx > 0) {
@@ -41,6 +42,15 @@ class _TutorialScreenState extends State<TutorialScreen> {
         _showinPage = Page.first;
       });
     }
+  }
+
+  void _onEnterAppTap() {
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(
+        builder: (context) => const MainNavigationScreen(),
+      ),
+      (route) => false,
+    );
   }
 
   @override
@@ -102,11 +112,10 @@ class _TutorialScreenState extends State<TutorialScreen> {
           child: AnimatedOpacity(
             opacity: _showinPage == Page.first ? 0 : 1,
             duration: const Duration(microseconds: 300),
-            child: CupertinoButton(
-              onPressed: () {},
-              color: Theme.of(context).primaryColor,
-              foregroundColor: Colors.white,
-              child: const Text("Enter the App!"),
+            child: OnboardingFormButton(
+              isIos: _isIos,
+              name: "Enter the App!",
+              onTap: _onEnterAppTap,
             ),
           ),
         ),

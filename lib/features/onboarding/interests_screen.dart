@@ -10,6 +10,8 @@ import 'package:tiktok_clone/constants/gaps.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
 import 'package:tiktok_clone/features/onboarding/tutorial_screen.dart';
 import 'package:tiktok_clone/features/onboarding/widgets/interest_button.dart';
+import 'package:tiktok_clone/features/onboarding/widgets/onboarding_form_button.dart';
+import 'package:tiktok_clone/utils/utils_targetPlatform.dart';
 
 // テンプレ準備
 const interests = [
@@ -100,7 +102,7 @@ class InterestsScreen extends StatefulWidget {
 
 class _InterestsScreenState extends State<InterestsScreen> {
   // OSごとにボタン(custom / Cupertinobutton)の分岐をしてみた
-  final bool _isAndroid = (defaultTargetPlatform == TargetPlatform.android);
+  final bool _isIos = isIos();
 
   final ScrollController _scrollController = ScrollController();
   bool _showTitle = false;
@@ -211,32 +213,11 @@ class _InterestsScreenState extends State<InterestsScreen> {
               vertical: Sizes.size12,
               horizontal: Sizes.size20,
             ),
-            child: _isAndroid
-                ? GestureDetector(
-                    onTap: _onNextTap,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).primaryColor,
-                      ),
-                      child: const Center(
-                        child: Text(
-                          "Next",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: Sizes.size16,
-                          ),
-                        ),
-                      ),
-                    ),
-                  )
-                : CupertinoButton(
-                    color: Theme.of(context).primaryColor,
-                    onPressed: _onNextTap,
-                    child: const Text(
-                      "Next",
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
+            child: OnboardingFormButton(
+              isIos: _isIos,
+              name: "Next",
+              onTap: _onNextTap,
+            ),
           ),
         ),
       ),
