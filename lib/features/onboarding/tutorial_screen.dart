@@ -3,7 +3,7 @@ import 'package:tiktok_clone/common/main_navigation/main_navigation.screen.dart'
 import 'package:tiktok_clone/constants/gaps.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
 import 'package:tiktok_clone/features/onboarding/widgets/onboarding_form_button.dart';
-import 'package:tiktok_clone/utils/utils_targetPlatform.dart';
+import 'package:tiktok_clone/utils/utils_target_platform.dart';
 
 enum Direction { right, left }
 

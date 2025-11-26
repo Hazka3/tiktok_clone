@@ -11,7 +11,7 @@ import 'package:tiktok_clone/constants/sizes.dart';
 import 'package:tiktok_clone/features/onboarding/tutorial_screen.dart';
 import 'package:tiktok_clone/features/onboarding/widgets/interest_button.dart';
 import 'package:tiktok_clone/features/onboarding/widgets/onboarding_form_button.dart';
-import 'package:tiktok_clone/utils/utils_targetPlatform.dart';
+import 'package:tiktok_clone/utils/utils_target_platform.dart';
 
 // テンプレ準備
 const interests = [
