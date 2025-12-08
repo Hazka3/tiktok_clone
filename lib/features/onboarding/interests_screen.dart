@@ -3,8 +3,6 @@
   無理矢理な実装も練習(のちに変える)
  */
 
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:tiktok_clone/constants/gaps.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
