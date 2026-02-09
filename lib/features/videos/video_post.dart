@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:tiktok_clone/constants/gaps.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
 import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
@@ -21,6 +22,8 @@ class VideoPost extends StatefulWidget {
 class _VideoPostState extends State<VideoPost>
     with SingleTickerProviderStateMixin {
   final Duration _animationDuration = const Duration(milliseconds: 300);
+
+  bool _isEllipsis = false;
   bool _isPaused = false;
 
   late final VideoPlayerController _videoPlayerController;
@@ -78,6 +81,12 @@ class _VideoPostState extends State<VideoPost>
     setState(() {});
   }
 
+  void _toggleSeeMore() {
+    setState(() {
+      _isEllipsis = !_isEllipsis;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -132,6 +141,68 @@ class _VideoPostState extends State<VideoPost>
                     ),
                   ),
                 ),
+              ),
+            ),
+          ),
+          Positioned(
+            bottom: 20,
+            left: 15,
+            child: AnimatedSize(
+              duration: const Duration(milliseconds: 100),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // アニメーション時に username が一瞬クリップされてしまうので、その予防策として余白を追加
+                  Gaps.v10,
+                  const Text(
+                    "@username",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: Sizes.size20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Gaps.v10,
+                  const Text(
+                    "This is actually the place 🍔",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: Sizes.size16,
+                    ),
+                  ),
+                  Gaps.v5,
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      SizedBox(
+                        width: 250,
+                        child: Text(
+                          "#googleearth #googlemaps #googleahahha #flutter #makeoverflow",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            overflow: _isEllipsis
+                                ? TextOverflow.fade
+                                : TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ),
+                      Gaps.h6,
+                      GestureDetector(
+                        onTap: _toggleSeeMore,
+                        child: Text(
+                          _isEllipsis ? "less" : "more",
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: Sizes.size16,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
           ),
