@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tiktok_clone/constants/gaps.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
+import 'package:tiktok_clone/features/videos/widgets/video_action_button.dart';
 import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
@@ -82,9 +83,9 @@ class _VideoPostState extends State<VideoPost>
   }
 
   void _toggleSeeMore() {
-    setState(() {
-      _isEllipsis = !_isEllipsis;
-    });
+    _isEllipsis = !_isEllipsis;
+
+    setState(() {});
   }
 
   @override
@@ -97,6 +98,7 @@ class _VideoPostState extends State<VideoPost>
   @override
   void dispose() {
     _videoPlayerController.dispose();
+    _animationController.dispose();
     super.dispose();
   }
 
@@ -146,7 +148,7 @@ class _VideoPostState extends State<VideoPost>
           ),
           Positioned(
             bottom: 20,
-            left: 15,
+            left: 10,
             child: AnimatedSize(
               duration: const Duration(milliseconds: 100),
               child: Column(
@@ -204,6 +206,39 @@ class _VideoPostState extends State<VideoPost>
                   ),
                 ],
               ),
+            ),
+          ),
+          const Positioned(
+            bottom: 20,
+            right: 10,
+            child: Column(
+              children: [
+                CircleAvatar(
+                  radius: 25,
+                  backgroundColor: Colors.black,
+                  foregroundColor: Colors.white,
+                  foregroundImage: NetworkImage(
+                    "https://avatars.githubusercontent.com/u/94900388",
+                  ),
+                  child: Text("Tom"),
+                ),
+                Gaps.v24,
+                VideoActionButton(
+                  icon: FontAwesomeIcons.solidHeart,
+                  text: "2.9M",
+                ),
+                Gaps.v24,
+
+                VideoActionButton(
+                  icon: FontAwesomeIcons.solidComment,
+                  text: "33.0K",
+                ),
+                Gaps.v24,
+                VideoActionButton(
+                  icon: FontAwesomeIcons.share,
+                  text: "Share",
+                ),
+              ],
             ),
           ),
         ],
