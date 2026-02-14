@@ -23,9 +23,7 @@ class DiscoverScreen extends StatefulWidget {
 
 class _DiscoverScreenState extends State<DiscoverScreen>
     with SingleTickerProviderStateMixin {
-  final TextEditingController _textEditingController = TextEditingController(
-    text: "Initial Text",
-  );
+  final TextEditingController _textEditingController = TextEditingController();
   late final TabController _tabController;
 
   void _initTabController() {
@@ -71,14 +69,47 @@ class _DiscoverScreenState extends State<DiscoverScreen>
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
-          title: CupertinoSearchTextField(
-            autocorrect: false,
-            keyboardType: TextInputType.text,
-            controller: _textEditingController,
-            onChanged: _onSearchChanged,
-            onSubmitted: _onSearchSubmitted,
+          title: SizedBox(
+            height: Sizes.size40,
+            child: TextField(
+              autocorrect: false,
+              keyboardType: TextInputType.text,
+              controller: _textEditingController,
+              onChanged: _onSearchChanged,
+              onSubmitted: _onSearchSubmitted,
+              decoration: InputDecoration(
+                isDense: true,
+                contentPadding: const EdgeInsets.symmetric(
+                  vertical: Sizes.size8,
+                ),
+                filled: true,
+                fillColor: Colors.grey.shade200,
+                hintText: "Search",
+                hintStyle: TextStyle(
+                  color: Colors.grey.shade400,
+                ),
+                prefixIconConstraints: const BoxConstraints(
+                  minHeight: 24,
+                  minWidth: 24,
+                ),
+                prefixIcon: Padding(
+                  padding: const EdgeInsets.all(Sizes.size8),
+                  child: FaIcon(
+                    FontAwesomeIcons.magnifyingGlass,
+                    size: Sizes.size18,
+                    color: Colors.grey.shade500,
+                  ),
+                ),
+                border: OutlineInputBorder(
+                  borderSide: BorderSide.none,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+            ),
           ),
-          actions: [const FaIcon(FontAwesomeIcons.sliders)],
+          actions: [
+            const FaIcon(FontAwesomeIcons.sliders),
+          ],
           actionsPadding: const EdgeInsets.only(
             right: Sizes.size16,
           ),
