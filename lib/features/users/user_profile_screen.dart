@@ -100,25 +100,81 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     ),
                     Gaps.v14,
                     FractionallySizedBox(
-                      widthFactor: 0.4,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: Sizes.size12,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).primaryColor,
-                          borderRadius: BorderRadius.circular(
-                            Sizes.size4,
+                      widthFactor: 0.6,
+                      child: Row(
+                        children: [
+                          Expanded(
+                            flex: 6,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                vertical: Sizes.size12 + Sizes.size1,
+                              ),
+                              decoration: BoxDecoration(
+                                color: Theme.of(context).primaryColor,
+                                borderRadius: BorderRadius.circular(
+                                  Sizes.size2,
+                                ),
+                              ),
+                              child: const Text(
+                                "Follow",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
                           ),
-                        ),
-                        child: const Text(
-                          "Follow",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w600,
+                          Gaps.h5,
+                          Expanded(
+                            flex: 2,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                vertical: Sizes.size10,
+                              ),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                border: Border.all(
+                                  color: Colors.grey.shade300,
+                                  width: 1.3,
+                                ),
+                                borderRadius: BorderRadius.circular(
+                                  Sizes.size2,
+                                ),
+                              ),
+                              child: const Center(
+                                child: FaIcon(
+                                  FontAwesomeIcons.youtube,
+                                ),
+                              ),
+                            ),
                           ),
-                        ),
+                          Gaps.h5,
+                          Expanded(
+                            flex: 2,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                vertical: Sizes.size14 + Sizes.size1,
+                              ),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                border: Border.all(
+                                  color: Colors.grey.shade300,
+                                  width: 1.3,
+                                ),
+                                borderRadius: BorderRadius.circular(
+                                  Sizes.size2,
+                                ),
+                              ),
+                              child: const Center(
+                                child: FaIcon(
+                                  FontAwesomeIcons.caretDown,
+                                  size: Sizes.size14,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                     Gaps.v14,
@@ -171,7 +227,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   crossAxisSpacing: Sizes.size2,
                   childAspectRatio: 3 / 4,
                 ),
-                itemBuilder: (context, index) => Column(
+                itemBuilder: (context, index) => Stack(
                   children: [
                     AspectRatio(
                       aspectRatio: 3 / 4,
@@ -180,6 +236,30 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                         placeholder: "assets/images/placeholder.jpg",
                         image:
                             "https://picsum.photos/seed/${index + 1}/200/${350 + (5 * index)}",
+                      ),
+                    ),
+                    Positioned(
+                      bottom: Sizes.size2,
+                      left: Sizes.size6,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const FaIcon(
+                            FontAwesomeIcons.play,
+                            color: Colors.white,
+                            size: Sizes.size14,
+                          ),
+                          Gaps.h4,
+                          Text(
+                            "${index + 1}.0M",
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: Sizes.size12,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ],
