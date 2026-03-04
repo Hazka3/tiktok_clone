@@ -3,7 +3,12 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
 
 class PostVideoButton extends StatefulWidget {
-  const PostVideoButton({super.key});
+  final bool inverted;
+
+  const PostVideoButton({
+    super.key,
+    required this.inverted,
+  });
 
   @override
   State<PostVideoButton> createState() => _PostVideoButtonState();
@@ -76,15 +81,15 @@ class _PostVideoButtonState extends State<PostVideoButton>
               horizontal: Sizes.size10,
             ),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: !widget.inverted ? Colors.white : Colors.black,
               borderRadius: BorderRadius.circular(Sizes.size8),
             ),
             child: Center(
               child: RotationTransition(
                 turns: _turns,
-                child: const FaIcon(
+                child: FaIcon(
                   FontAwesomeIcons.plus,
-                  color: Colors.black,
+                  color: !widget.inverted ? Colors.black : Colors.white,
                   size: Sizes.size20,
                 ),
               ),
