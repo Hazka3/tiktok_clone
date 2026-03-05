@@ -27,6 +27,7 @@ class _VideoPostState extends State<VideoPost>
 
   bool _isEllipsis = false;
   bool _isPaused = false;
+  bool _isMute = false;
 
   late final VideoPlayerController _videoPlayerController;
   late final AnimationController _animationController;
@@ -62,6 +63,16 @@ class _VideoPostState extends State<VideoPost>
         widget.onVideoFinished();
       }
     }
+  }
+
+  void _onToggleMute() {
+    _isMute = !_isMute;
+    if (_isMute) {
+      _videoPlayerController.setVolume(0);
+    } else {
+      _videoPlayerController.setVolume(1);
+    }
+    setState(() {});
   }
 
   void _onVisibilityChanged(VisibilityInfo info) {
@@ -266,6 +277,27 @@ class _VideoPostState extends State<VideoPost>
                 ),
               ],
             ),
+          ),
+          Positioned(
+            left: 5,
+            top: 50,
+            child: _isMute
+                ? IconButton(
+                    onPressed: _onToggleMute,
+                    icon: const FaIcon(
+                      FontAwesomeIcons.volumeXmark,
+                      color: Colors.white,
+                      size: Sizes.size18,
+                    ),
+                  )
+                : IconButton(
+                    onPressed: _onToggleMute,
+                    icon: const FaIcon(
+                      FontAwesomeIcons.volumeHigh,
+                      color: Colors.white,
+                      size: Sizes.size18,
+                    ),
+                  ),
           ),
         ],
       ),
