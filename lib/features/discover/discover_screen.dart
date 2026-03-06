@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tiktok_clone/constants/gaps.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
+import 'package:tiktok_clone/utils/theme.dart';
 
 final tabs = [
   "Top",
@@ -88,13 +89,18 @@ class _DiscoverScreenState extends State<DiscoverScreen>
                 controller: _textEditingController,
                 onChanged: _onSearchChanged,
                 onSubmitted: _onSearchSubmitted,
+                style: TextStyle(
+                  color: isDarkMode(context) ? Colors.white : Colors.black,
+                ),
                 decoration: InputDecoration(
                   isDense: true,
                   contentPadding: const EdgeInsets.symmetric(
                     vertical: Sizes.size8,
                   ),
                   filled: true,
-                  fillColor: Colors.grey.shade200,
+                  fillColor: isDarkMode(context)
+                      ? Colors.grey.shade800
+                      : Colors.grey.shade200,
                   hintText: "Search",
                   hintStyle: TextStyle(
                     color: Colors.grey.shade400,
@@ -154,11 +160,10 @@ class _DiscoverScreenState extends State<DiscoverScreen>
             fontWeight: FontWeight.w600,
             fontSize: Sizes.size18,
           ),
-          labelColor: Colors.black,
+          // labelColor: Colors.black,
           unselectedLabelColor: Colors.grey.shade500,
           indicatorSize: TabBarIndicatorSize.tab,
           indicatorWeight: 3,
-          indicatorColor: Colors.black,
           isScrollable: true,
           tabAlignment: TabAlignment.start,
           splashFactory: NoSplash.splashFactory,
@@ -216,7 +221,9 @@ class _DiscoverScreenState extends State<DiscoverScreen>
                 DefaultTextStyle(
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    color: Colors.grey.shade600,
+                    color: isDarkMode(context)
+                        ? Colors.grey.shade400
+                        : Colors.grey.shade600,
                   ),
                   child: Row(
                     children: [

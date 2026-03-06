@@ -2,7 +2,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:tiktok_clone/common/main_navigation/main_navigation.screen.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
-import 'package:tiktok_clone/features/authentication/signup_screen.dart';
 import 'package:tiktok_clone/firebase_options.dart';
 
 void main() async {
@@ -47,6 +46,10 @@ class TikTokApp extends StatelessWidget {
           color: Colors.grey.shade900,
           surfaceTintColor: Colors.transparent,
         ),
+        tabBarTheme: const TabBarThemeData(
+          labelColor: Colors.white,
+          indicatorColor: Colors.white,
+        ),
         useMaterial3: true,
       ),
       theme: ThemeData(
@@ -72,9 +75,13 @@ class TikTokApp extends StatelessWidget {
           color: Colors.white,
           surfaceTintColor: Colors.transparent,
         ),
+        tabBarTheme: const TabBarThemeData(
+          labelColor: Colors.black,
+          indicatorColor: Colors.black,
+        ),
         useMaterial3: true,
       ),
-      home: const SignUpScreen(),
+      home: const MainNavigationScreen(),
     );
   }
 }
