@@ -5,6 +5,7 @@ import 'package:tiktok_clone/constants/gaps.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
 import 'package:tiktok_clone/features/onboarding/interests_screen.dart';
 import 'package:tiktok_clone/features/authentication/widgets/register_form_button.dart';
+import 'package:tiktok_clone/utils/theme.dart';
 
 class BirthdayScreen extends StatefulWidget {
   const BirthdayScreen({super.key});
@@ -69,11 +70,13 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
               ),
             ),
             Gaps.v8,
-            const Text(
-              "Your birthday won't be shown publicly",
-              style: TextStyle(
-                fontSize: Sizes.size16,
-                color: Colors.black54,
+            const Opacity(
+              opacity: 0.6,
+              child: Text(
+                "Your birthday won't be shown publicly",
+                style: TextStyle(
+                  fontSize: Sizes.size16,
+                ),
               ),
             ),
             Gaps.v16,
@@ -100,6 +103,8 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
         ),
       ),
       bottomNavigationBar: BottomAppBar(
+        // BottomNavigationBar を使っていないため theme color を手動で指定
+        color: isDarkMode(context) ? Colors.black : Colors.white,
         height: MediaQuery.of(context).size.height * 0.3,
         child: CupertinoDatePicker(
           maximumDate: initialDate,

@@ -9,6 +9,7 @@ import 'package:tiktok_clone/constants/sizes.dart';
 import 'package:tiktok_clone/features/onboarding/tutorial_screen.dart';
 import 'package:tiktok_clone/features/onboarding/widgets/interest_button.dart';
 import 'package:tiktok_clone/features/onboarding/widgets/onboarding_form_button.dart';
+import 'package:tiktok_clone/utils/theme.dart';
 import 'package:tiktok_clone/utils/utils_target_platform.dart';
 
 // テンプレ準備
@@ -200,7 +201,9 @@ class _InterestsScreenState extends State<InterestsScreen> {
         decoration: BoxDecoration(
           border: Border(
             top: BorderSide(
-              color: Colors.black.withValues(alpha: 0.1),
+              color: isDarkMode(context)
+                  ? Colors.grey
+                  : Colors.black.withValues(alpha: 0.1),
             ),
           ),
         ),
