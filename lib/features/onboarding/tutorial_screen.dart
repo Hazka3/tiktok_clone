@@ -3,6 +3,7 @@ import 'package:tiktok_clone/common/main_navigation/main_navigation.screen.dart'
 import 'package:tiktok_clone/constants/gaps.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
 import 'package:tiktok_clone/features/onboarding/widgets/onboarding_form_button.dart';
+import 'package:tiktok_clone/utils/theme.dart';
 import 'package:tiktok_clone/utils/utils_target_platform.dart';
 
 enum Direction { right, left }
@@ -109,6 +110,7 @@ class _TutorialScreenState extends State<TutorialScreen> {
           ),
         ),
         bottomNavigationBar: BottomAppBar(
+          color: isDarkMode(context) ? Colors.black : Colors.white,
           child: AnimatedOpacity(
             opacity: _showinPage == Page.first ? 0 : 1,
             duration: const Duration(microseconds: 300),

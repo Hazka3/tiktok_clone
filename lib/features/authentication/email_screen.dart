@@ -102,6 +102,19 @@ class _EmailScreenState extends State<EmailScreen> {
                   focusedBorder: UnderlineInputBorder(
                     borderSide: BorderSide(color: Colors.grey.shade400),
                   ),
+                  errorStyle: const TextStyle(
+                    color: Colors.red,
+                  ),
+                  focusedErrorBorder: const UnderlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Colors.red,
+                    ),
+                  ),
+                  errorBorder: const UnderlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Colors.red,
+                    ),
+                  ),
                 ),
               ),
               Gaps.v28,

@@ -3,9 +3,9 @@
 */
 
 import 'package:flutter/material.dart';
+import 'package:tiktok_clone/common/main_navigation/main_navigation.screen.dart';
 import 'package:tiktok_clone/constants/gaps.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
-import 'package:tiktok_clone/features/onboarding/interests_screen.dart';
 import 'package:tiktok_clone/features/authentication/widgets/register_form_button.dart';
 
 class LoginFormScreen extends StatefulWidget {
@@ -26,7 +26,7 @@ class _LoginFormScreenState extends State<LoginFormScreen> {
         _formKey.currentState!.save();
         Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
-            builder: (context) => const InterestsScreen(),
+            builder: (context) => const MainNavigationScreen(),
           ),
           (route) => false,
         );
@@ -70,6 +70,7 @@ class _LoginFormScreenState extends State<LoginFormScreen> {
               ),
               Gaps.v16,
               TextFormField(
+                obscureText: true,
                 decoration: InputDecoration(
                   hintText: "Password",
                   enabledBorder: UnderlineInputBorder(

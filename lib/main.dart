@@ -26,20 +26,48 @@ class TikTokApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'TikTok clone',
+      themeMode: ThemeMode.system,
       debugShowCheckedModeBanner: false,
+      darkTheme: ThemeData(
+        brightness: Brightness.dark,
+        primaryColor: const Color(0xFFE9435A),
+        textSelectionTheme: const TextSelectionThemeData(
+          cursorColor: Color(0xFFE9435A),
+        ),
+        scaffoldBackgroundColor: Colors.black,
+        appBarTheme: AppBarTheme(
+          elevation: 0,
+          centerTitle: true,
+          surfaceTintColor: Colors.transparent,
+          foregroundColor: Colors.white,
+          backgroundColor: Colors.grey.shade900,
+          titleTextStyle: const TextStyle(
+            fontSize: Sizes.size16 + Sizes.size2,
+            fontWeight: FontWeight.w600,
+            color: Colors.white,
+          ),
+        ),
+        bottomAppBarTheme: BottomAppBarThemeData(
+          color: Colors.grey.shade900,
+          surfaceTintColor: Colors.transparent,
+        ),
+        tabBarTheme: const TabBarThemeData(
+          labelColor: Colors.white,
+          indicatorColor: Colors.white,
+        ),
+        useMaterial3: true,
+      ),
       theme: ThemeData(
+        brightness: Brightness.light,
         primaryColor: const Color(0xFFE9435A),
         textSelectionTheme: const TextSelectionThemeData(
           cursorColor: Color(0xFFE9435A),
         ),
         scaffoldBackgroundColor: Colors.white,
-        bottomAppBarTheme: const BottomAppBarThemeData(
-          color: Colors.white,
-        ),
         appBarTheme: const AppBarTheme(
           elevation: 0,
           centerTitle: true,
-          surfaceTintColor: Colors.white,
+          surfaceTintColor: Colors.transparent,
           foregroundColor: Colors.black,
           backgroundColor: Colors.white,
           titleTextStyle: TextStyle(
@@ -47,6 +75,14 @@ class TikTokApp extends StatelessWidget {
             fontWeight: FontWeight.w600,
             color: Colors.black,
           ),
+        ),
+        bottomAppBarTheme: const BottomAppBarThemeData(
+          color: Colors.white,
+          surfaceTintColor: Colors.transparent,
+        ),
+        tabBarTheme: const TabBarThemeData(
+          labelColor: Colors.black,
+          indicatorColor: Colors.black,
         ),
         useMaterial3: true,
       ),

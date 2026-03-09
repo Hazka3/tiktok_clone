@@ -53,7 +53,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   actions: [
                     CupertinoDialogAction(
                       onPressed: () => Navigator.of(context).pop(),
-                      child: const Text("No"),
+                      child: const Text(
+                        "No",
+                      ),
                     ),
                     CupertinoDialogAction(
                       onPressed: () => Navigator.of(context).pop(),

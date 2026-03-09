@@ -32,9 +32,8 @@ class _InboxScreenState extends State<InboxScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        surfaceTintColor: Colors.white,
         elevation: 1,
-        shadowColor: Colors.grey.shade50,
+        shadowColor: Colors.black26,
         title: const Text("Inbox"),
         actions: [
           IconButton(

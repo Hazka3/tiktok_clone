@@ -8,6 +8,7 @@ import 'package:tiktok_clone/features/discover/discover_screen.dart';
 import 'package:tiktok_clone/features/inbox/inbox_screen.dart';
 import 'package:tiktok_clone/features/users/user_profile_screen.dart';
 import 'package:tiktok_clone/features/videos/video_timeline_screen.dart';
+import 'package:tiktok_clone/utils/theme.dart';
 
 class MainNavigationScreen extends StatefulWidget {
   const MainNavigationScreen({super.key});
@@ -17,23 +18,7 @@ class MainNavigationScreen extends StatefulWidget {
 }
 
 class _MainNavigationScreenState extends State<MainNavigationScreen> {
-  int _selectedIndex = 0;
-
-  final List<Widget> screens = [
-    const Center(
-      child: Text("Home"),
-    ),
-    const Center(
-      child: Text("Discover"),
-    ),
-    Container(),
-    const Center(
-      child: Text("Inbox"),
-    ),
-    const Center(
-      child: Text("Profile"),
-    ),
-  ];
+  int _selectedIndex = 1;
 
   void _onTabTap(int index) {
     setState(() {
@@ -57,8 +42,11 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = isDarkMode(context);
     return Scaffold(
-      backgroundColor: _selectedIndex == 0 ? Colors.black : Colors.white,
+      backgroundColor: _selectedIndex == 0 || isDark
+          ? Colors.black
+          : Colors.white,
       resizeToAvoidBottomInset: false,
       body: Stack(
         children: [
@@ -81,7 +69,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
         ],
       ),
       bottomNavigationBar: BottomAppBar(
-        color: _selectedIndex == 0 ? Colors.black : Colors.white,
+        color: _selectedIndex == 0 || isDark ? Colors.black : Colors.white,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: Sizes.size12),
           child: Row(
