@@ -20,22 +20,6 @@ class MainNavigationScreen extends StatefulWidget {
 class _MainNavigationScreenState extends State<MainNavigationScreen> {
   int _selectedIndex = 1;
 
-  final List<Widget> screens = [
-    const Center(
-      child: Text("Home"),
-    ),
-    const Center(
-      child: Text("Discover"),
-    ),
-    Container(),
-    const Center(
-      child: Text("Inbox"),
-    ),
-    const Center(
-      child: Text("Profile"),
-    ),
-  ];
-
   void _onTabTap(int index) {
     setState(() {
       _selectedIndex = index;
@@ -60,7 +44,9 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
   Widget build(BuildContext context) {
     final isDark = isDarkMode(context);
     return Scaffold(
-      backgroundColor: _selectedIndex == 0 ? Colors.black : Colors.white,
+      backgroundColor: _selectedIndex == 0 || isDark
+          ? Colors.black
+          : Colors.white,
       resizeToAvoidBottomInset: false,
       body: Stack(
         children: [
