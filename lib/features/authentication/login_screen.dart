@@ -25,6 +25,8 @@ class LogInScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = isDarkMode(context);
+
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -70,9 +72,7 @@ class LogInScreen extends StatelessWidget {
         ),
       ),
       bottomNavigationBar: BottomAppBar(
-        color: isDarkMode(context)
-            ? Colors.grey.shade900
-            : Colors.grey.shade100,
+        color: isDark ? Colors.grey.shade900 : Colors.grey.shade100,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
