@@ -1,9 +1,11 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:tiktok_clone/common/main_navigation/main_navigation.screen.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
+import 'package:tiktok_clone/features/authentication/email_screen.dart';
+import 'package:tiktok_clone/features/authentication/login_screen.dart';
 import 'package:tiktok_clone/features/authentication/signup_screen.dart';
+import 'package:tiktok_clone/features/authentication/username_screen.dart';
 import 'package:tiktok_clone/firebase_options.dart';
 
 void main() async {
@@ -87,7 +89,13 @@ class TikTokApp extends StatelessWidget {
         ),
         useMaterial3: true,
       ),
-      home: const SignUpScreen(),
+      initialRoute: SignUpScreen.routeName,
+      routes: {
+        SignUpScreen.routeName: (context) => const SignUpScreen(),
+        UserNameScreen.routeName: (context) => const UserNameScreen(),
+        LogInScreen.routeName: (context) => const LogInScreen(),
+        EmailScreen.routeName: (context) => const EmailScreen(),
+      },
     );
   }
 }
