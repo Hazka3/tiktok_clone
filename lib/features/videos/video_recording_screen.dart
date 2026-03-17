@@ -2,9 +2,12 @@ import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:tiktok_clone/constants/gaps.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
+import 'package:tiktok_clone/features/videos/video_preview_screen.dart';
 import 'package:tiktok_clone/features/videos/widgets/flash_mode_button.dart';
 
 class VideoRecordingScreen extends StatefulWidget {
@@ -72,6 +75,7 @@ class _VideoRecordingScreenState extends State<VideoRecordingScreen>
       );
 
       await _cameraController.initialize();
+      await _cameraController.prepareForVideoRecording();
 
       _flashMode = _cameraController.value.flashMode;
       setState(() {});
@@ -97,19 +101,57 @@ class _VideoRecordingScreenState extends State<VideoRecordingScreen>
     end: 1.3,
   ).animate(_buttonAnimationController);
 
-  void _startRecording(TapDownDetails _) {
+  Future<void> _startRecording(TapDownDetails _) async {
     if (_buttonAnimationController.isAnimating ||
         _progressAnimationController.isAnimating) {
       return;
     }
 
+    if (_cameraController.value.isRecordingVideo) return;
+
+    await _cameraController.startVideoRecording();
+
     _buttonAnimationController.forward();
     _progressAnimationController.forward();
   }
 
-  void _stopRecording() {
+  Future<void> _stopRecording() async {
+    if (!_cameraController.value.isRecordingVideo) return;
+
     _buttonAnimationController.reverse();
     _progressAnimationController.reset();
+
+    final XFile video = await _cameraController.stopVideoRecording();
+
+    if (!mounted) return;
+
+    await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => VideoPreviewScreen(
+          video: video,
+          isPicked: false,
+        ),
+      ),
+    );
+  }
+
+  Future<void> _onPickVideoPressed() async {
+    final video = await ImagePicker().pickVideo(source: ImageSource.gallery);
+
+    if (video == null) return;
+
+    if (!mounted) return;
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => VideoPreviewScreen(
+          video: video,
+          isPicked: true,
+        ),
+      ),
+    );
   }
 
   @override
@@ -208,35 +250,53 @@ class _VideoRecordingScreenState extends State<VideoRecordingScreen>
                     ),
                     Positioned(
                       bottom: Sizes.size40,
-                      child: GestureDetector(
-                        onTapDown: _startRecording,
-                        onTapUp: (details) => _stopRecording(),
-                        onLongPressUp: () => _stopRecording(),
-                        child: ScaleTransition(
-                          scale: _buttonAnimation,
-                          child: Stack(
-                            alignment: AlignmentGeometry.center,
-                            children: [
-                              SizedBox(
-                                height: Sizes.size80 + Sizes.size14,
-                                width: Sizes.size80 + Sizes.size14,
-                                child: CircularProgressIndicator(
-                                  color: Colors.red,
-                                  strokeWidth: Sizes.size6,
-                                  value: _progressAnimationController.value,
-                                ),
+                      width: MediaQuery.of(context).size.width,
+                      child: Row(
+                        children: [
+                          const Spacer(),
+                          GestureDetector(
+                            onTapDown: _startRecording,
+                            onTapUp: (details) => _stopRecording(),
+                            onLongPressUp: () => _stopRecording(),
+                            child: ScaleTransition(
+                              scale: _buttonAnimation,
+                              child: Stack(
+                                alignment: AlignmentGeometry.center,
+                                children: [
+                                  SizedBox(
+                                    height: Sizes.size80 + Sizes.size14,
+                                    width: Sizes.size80 + Sizes.size14,
+                                    child: CircularProgressIndicator(
+                                      color: Colors.red,
+                                      strokeWidth: Sizes.size6,
+                                      value: _progressAnimationController.value,
+                                    ),
+                                  ),
+                                  Container(
+                                    height: Sizes.size80,
+                                    width: Sizes.size80,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Colors.red.shade500,
+                                    ),
+                                  ),
+                                ],
                               ),
-                              Container(
-                                height: Sizes.size80,
-                                width: Sizes.size80,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: Colors.red.shade500,
-                                ),
-                              ),
-                            ],
+                            ),
                           ),
-                        ),
+                          Expanded(
+                            child: Container(
+                              alignment: Alignment.center,
+                              child: IconButton(
+                                onPressed: _onPickVideoPressed,
+                                icon: const FaIcon(
+                                  FontAwesomeIcons.image,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ],
