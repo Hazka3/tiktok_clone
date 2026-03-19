@@ -1,6 +1,8 @@
+import 'dart:io';
+
 import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/gestures.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
@@ -18,12 +20,16 @@ class VideoRecordingScreen extends StatefulWidget {
 }
 
 class _VideoRecordingScreenState extends State<VideoRecordingScreen>
-    with TickerProviderStateMixin {
+    with TickerProviderStateMixin, WidgetsBindingObserver {
   bool _hasPermission = false;
   bool _deniedPermission = false;
+  bool _appActivated = true;
 
   bool _isSelfieMode = false;
   late FlashMode _flashMode;
+
+  // iOS シミュレーターでデバッグ中はカメラ機能をOFFにするためのフラグ
+  late final bool _noCamera = kDebugMode && Platform.isIOS;
 
   late CameraController _cameraController;
   late final AnimationController _buttonAnimationController =
@@ -41,6 +47,11 @@ class _VideoRecordingScreenState extends State<VideoRecordingScreen>
         lowerBound: 0.0,
         upperBound: 1.0,
       );
+
+  late final Animation<double> _buttonAnimation = Tween(
+    begin: 1.0,
+    end: 1.3,
+  ).animate(_buttonAnimationController);
 
   Future<void> _initPermission() async {
     final cameraPermission = await Permission.camera.request();
@@ -69,6 +80,7 @@ class _VideoRecordingScreenState extends State<VideoRecordingScreen>
       if (cameras.isEmpty) {
         return;
       }
+
       _cameraController = CameraController(
         cameras[_isSelfieMode ? 1 : 0],
         ResolutionPreset.ultraHigh,
@@ -96,12 +108,18 @@ class _VideoRecordingScreenState extends State<VideoRecordingScreen>
     setState(() {});
   }
 
-  late final Animation<double> _buttonAnimation = Tween(
-    begin: 1.0,
-    end: 1.3,
-  ).animate(_buttonAnimationController);
+  Future<void> _updateZoom(double delta) async {
+    final screenHeight = MediaQuery.of(context).size.height / 100;
 
-  Future<void> _startRecording(TapDownDetails _) async {
+    final setZoom = (screenHeight - (delta / (screenHeight * 9))).clamp(
+      1.0,
+      5.0,
+    );
+
+    await _cameraController.setZoomLevel(setZoom);
+  }
+
+  Future<void> _startRecording() async {
     if (_buttonAnimationController.isAnimating ||
         _progressAnimationController.isAnimating) {
       return;
@@ -120,6 +138,9 @@ class _VideoRecordingScreenState extends State<VideoRecordingScreen>
 
     _buttonAnimationController.reverse();
     _progressAnimationController.reset();
+
+    // カメラ倍率を初期化
+    await _cameraController.setZoomLevel(1.0);
 
     final XFile video = await _cameraController.stopVideoRecording();
 
@@ -155,9 +176,42 @@ class _VideoRecordingScreenState extends State<VideoRecordingScreen>
   }
 
   @override
+  Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
+    /* 
+      permission モーダルはappより前面に表示されるが、この状態(cameracontrollerがinitialize されていない)でcontrollerにアクセスしようとするとエラーになる
+      permission > init controller の順に処理されているので、下記のように_hasPermission フラグと controller の初期化有無をチェックする処理を追加することで回避
+    */
+    if (!_hasPermission) return;
+    if (!_cameraController.value.isInitialized) return;
+
+    switch (state) {
+      case AppLifecycleState.resumed:
+        _appActivated = true;
+        await _initPermission();
+        break;
+
+      case AppLifecycleState.paused:
+      case AppLifecycleState.hidden:
+      case AppLifecycleState.inactive:
+      case AppLifecycleState.detached:
+        _appActivated = false;
+
+        _cameraController.dispose();
+        break;
+    }
+    setState(() {});
+  }
+
+  @override
   void initState() {
     super.initState();
-    _initPermission();
+    if (!_noCamera) {
+      _initPermission();
+    } else {
+      _hasPermission = true;
+    }
+    WidgetsBinding.instance.addObserver(this);
+
     _progressAnimationController.addListener(
       () {
         setState(() {});
@@ -184,6 +238,7 @@ class _VideoRecordingScreenState extends State<VideoRecordingScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
+    
       body: SafeArea(
         child: SizedBox(
           width: MediaQuery.of(context).size.width,
@@ -202,52 +257,54 @@ class _VideoRecordingScreenState extends State<VideoRecordingScreen>
                     ),
                   ],
                 )
-              : !_hasPermission || !_cameraController.value.isInitialized
+              : !_hasPermission || !_appActivated
               ? const Center(
                   child: CircularProgressIndicator.adaptive(),
                 )
               : Stack(
                   alignment: AlignmentGeometry.center,
                   children: [
-                    CameraPreview(_cameraController),
-                    Positioned(
-                      top: Sizes.size10,
-                      left: Sizes.size10,
-                      child: Column(
-                        children: [
-                          IconButton(
-                            color: Colors.white,
-                            icon: const Icon(Icons.cameraswitch),
-                            onPressed: _toggleSelfieMode,
-                          ),
-                          Gaps.v10,
-                          FlashModeButton(
-                            currentMode: _flashMode,
-                            mode: FlashMode.off,
-                            icon: Icons.flash_off_rounded,
-                            onPressed: _setFlashMode,
-                          ),
-                          FlashModeButton(
-                            currentMode: _flashMode,
-                            mode: FlashMode.always,
-                            icon: Icons.flash_on_rounded,
-                            onPressed: _setFlashMode,
-                          ),
-                          FlashModeButton(
-                            currentMode: _flashMode,
-                            mode: FlashMode.auto,
-                            icon: Icons.flash_auto_rounded,
-                            onPressed: _setFlashMode,
-                          ),
-                          FlashModeButton(
-                            currentMode: _flashMode,
-                            mode: FlashMode.torch,
-                            icon: Icons.flashlight_on_rounded,
-                            onPressed: _setFlashMode,
-                          ),
-                        ],
+                    if (!_noCamera && _cameraController.value.isInitialized)
+                      CameraPreview(_cameraController),
+                    if (!_noCamera)
+                      Positioned(
+                        top: Sizes.size10,
+                        left: Sizes.size10,
+                        child: Column(
+                          children: [
+                            IconButton(
+                              color: Colors.white,
+                              icon: const Icon(Icons.cameraswitch),
+                              onPressed: _toggleSelfieMode,
+                            ),
+                            Gaps.v10,
+                            FlashModeButton(
+                              currentMode: _flashMode,
+                              mode: FlashMode.off,
+                              icon: Icons.flash_off_rounded,
+                              onPressed: _setFlashMode,
+                            ),
+                            FlashModeButton(
+                              currentMode: _flashMode,
+                              mode: FlashMode.always,
+                              icon: Icons.flash_on_rounded,
+                              onPressed: _setFlashMode,
+                            ),
+                            FlashModeButton(
+                              currentMode: _flashMode,
+                              mode: FlashMode.auto,
+                              icon: Icons.flash_auto_rounded,
+                              onPressed: _setFlashMode,
+                            ),
+                            FlashModeButton(
+                              currentMode: _flashMode,
+                              mode: FlashMode.torch,
+                              icon: Icons.flashlight_on_rounded,
+                              onPressed: _setFlashMode,
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
                     Positioned(
                       bottom: Sizes.size40,
                       width: MediaQuery.of(context).size.width,
@@ -255,9 +312,15 @@ class _VideoRecordingScreenState extends State<VideoRecordingScreen>
                         children: [
                           const Spacer(),
                           GestureDetector(
-                            onTapDown: _startRecording,
-                            onTapUp: (details) => _stopRecording(),
-                            onLongPressUp: () => _stopRecording(),
+                            onLongPressStart: (details) {
+                              _startRecording();
+                            },
+                            onLongPressMoveUpdate: (details) {
+                              final delta = details.globalPosition.dy;
+                              _updateZoom(delta);
+                            },
+                            onLongPressEnd: (details) => _stopRecording(),
+                            // onTapUp: (details) => _stopRecording(),
                             child: ScaleTransition(
                               scale: _buttonAnimation,
                               child: Stack(

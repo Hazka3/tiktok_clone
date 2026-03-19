@@ -6,6 +6,7 @@ import 'package:tiktok_clone/constants/gaps.dart';
 import 'package:tiktok_clone/features/discover/discover_screen.dart';
 import 'package:tiktok_clone/features/inbox/inbox_screen.dart';
 import 'package:tiktok_clone/features/users/user_profile_screen.dart';
+import 'package:tiktok_clone/features/videos/video_recording_screen.dart';
 import 'package:tiktok_clone/features/videos/video_timeline_screen.dart';
 import 'package:tiktok_clone/utils/theme.dart';
 
@@ -28,12 +29,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
   void _onPostVideoTap() {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => Scaffold(
-          appBar: AppBar(
-            // ポスト機能は未実装のため暫定措置として空 scaffold に遷移
-            title: const Text("Record video"),
-          ),
-        ),
+        builder: (context) => const VideoRecordingScreen(),
         fullscreenDialog: true,
       ),
     );
