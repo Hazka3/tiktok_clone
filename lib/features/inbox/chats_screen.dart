@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
 import 'package:tiktok_clone/features/inbox/chat_detail_screen.dart';
 
 class ChatsScreen extends StatefulWidget {
+  static const String routeURL = "/inbox/chats";
+  static const String routeName = "chats";
+
   const ChatsScreen({super.key});
 
   @override
@@ -16,10 +20,9 @@ class _ChatsScreenState extends State<ChatsScreen> {
   List<int> _items = [];
   final Duration _duration = const Duration(milliseconds: 300);
 
-
   Widget _makeTile(int index) {
     return ListTile(
-      onTap: _onChatTap,
+      onTap: () => _onChatTap(index),
       onLongPress: () => _deleteItem(index),
       leading: const CircleAvatar(
         radius: Sizes.size32,
@@ -83,11 +86,10 @@ class _ChatsScreenState extends State<ChatsScreen> {
     debugPrint("$_items");
   }
 
-  void _onChatTap() {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => const ChatDetailScreen(),
-      ),
+  void _onChatTap(int index) {
+    context.pushNamed(
+      ChatDetailScreen.routeName,
+      pathParameters: {"chatId": "$index"},
     );
   }
 

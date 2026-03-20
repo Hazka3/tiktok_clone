@@ -14,14 +14,7 @@ class _VideoTimelineScreenState extends State<VideoTimelineScreen> {
 
   final PageController _pageController = PageController();
 
-  int _itemCount = 4;
-
-  List<Color> colors = [
-    Colors.blue,
-    Colors.red,
-    Colors.yellow,
-    Colors.teal,
-  ];
+  final int _itemCount = 4;
 
   void _onPageChanged(int page) {
     _pageController.animateToPage(
@@ -29,17 +22,6 @@ class _VideoTimelineScreenState extends State<VideoTimelineScreen> {
       duration: _scrollDuration,
       curve: _scrollCurve,
     );
-
-    if (page == _itemCount - 1) {
-      _itemCount = _itemCount + 4;
-      colors.addAll([
-        Colors.blue,
-        Colors.red,
-        Colors.yellow,
-        Colors.teal,
-      ]);
-      setState(() {});
-    }
   }
 
   void _onVideoFinished() {
