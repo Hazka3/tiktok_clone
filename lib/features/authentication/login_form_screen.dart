@@ -3,12 +3,16 @@
 */
 
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:tiktok_clone/common/main_navigation/main_navigation.screen.dart';
 import 'package:tiktok_clone/constants/gaps.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
 import 'package:tiktok_clone/features/authentication/widgets/register_form_button.dart';
 
 class LoginFormScreen extends StatefulWidget {
+  static const routeURL = "/loginform";
+  static const routeName = "loginform";
+
   const LoginFormScreen({super.key});
 
   @override
@@ -24,11 +28,10 @@ class _LoginFormScreenState extends State<LoginFormScreen> {
     if (_formKey.currentState != null) {
       if (_formKey.currentState!.validate()) {
         _formKey.currentState!.save();
-        Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(
-            builder: (context) => const MainNavigationScreen(),
-          ),
-          (route) => false,
+
+        context.goNamed(
+          MainNavigationScreen.routeName,
+          pathParameters: {"tab": "home"},
         );
       }
     }

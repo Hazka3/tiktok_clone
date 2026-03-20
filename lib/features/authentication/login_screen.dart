@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 import 'package:tiktok_clone/constants/gaps.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
 import 'package:tiktok_clone/features/authentication/login_form_screen.dart';
@@ -7,20 +8,17 @@ import 'package:tiktok_clone/features/authentication/widgets/auth_button.dart';
 import 'package:tiktok_clone/utils/theme.dart';
 
 class LogInScreen extends StatelessWidget {
+  static const routeURL = "/login";
+  static const routeName = "login";
+
   const LogInScreen({super.key});
 
   void _onSignupTap(BuildContext context) {
-    Navigator.of(
-      context,
-    ).pop();
+    context.pop();
   }
 
-  void _onAuthButtonTap(BuildContext context, Widget screen) {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => screen,
-      ),
-    );
+  void _onAuthButtonTap(BuildContext context, String location) {
+    context.pushNamed(location);
   }
 
   @override
@@ -56,10 +54,8 @@ class LogInScreen extends StatelessWidget {
               AuthButton(
                 text: "Use email & password",
                 icon: const FaIcon(FontAwesomeIcons.user),
-                onTap: () => _onAuthButtonTap(
-                  context,
-                  const LoginFormScreen(),
-                ),
+                onTap: () =>
+                    _onAuthButtonTap(context, LoginFormScreen.routeName),
               ),
               Gaps.v20,
               AuthButton(
