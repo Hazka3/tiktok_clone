@@ -13,7 +13,7 @@ import 'package:tiktok_clone/utils/theme.dart';
 
 class MainNavigationScreen extends StatefulWidget {
   static const String routeURL = "/:tab";
-  static const String routeName = "tab";
+  static const String routeName = "top";
 
   final String tab;
 
@@ -48,12 +48,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
   }
 
   void _onPostVideoTap() {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => const VideoRecordingScreen(),
-        fullscreenDialog: true,
-      ),
-    );
+    context.pushNamed(VideoRecordingScreen.routeName);
   }
 
   @override

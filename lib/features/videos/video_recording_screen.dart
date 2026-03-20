@@ -13,6 +13,9 @@ import 'package:tiktok_clone/features/videos/video_preview_screen.dart';
 import 'package:tiktok_clone/features/videos/widgets/flash_mode_button.dart';
 
 class VideoRecordingScreen extends StatefulWidget {
+  static const String routeURL = "/recording/video";
+  static const String routeName = "recording";
+
   const VideoRecordingScreen({super.key});
 
   @override
@@ -181,6 +184,7 @@ class _VideoRecordingScreenState extends State<VideoRecordingScreen>
       permission モーダルはappより前面に表示されるが、この状態(cameracontrollerがinitialize されていない)でcontrollerにアクセスしようとするとエラーになる
       permission > init controller の順に処理されているので、下記のように_hasPermission フラグと controller の初期化有無をチェックする処理を追加することで回避
     */
+    if (_noCamera) return;
     if (!_hasPermission) return;
     if (!_cameraController.value.isInitialized) return;
 
@@ -228,7 +232,9 @@ class _VideoRecordingScreenState extends State<VideoRecordingScreen>
 
   @override
   void dispose() {
-    _cameraController.dispose();
+    if (!_noCamera) {
+      _cameraController.dispose();
+    }
     _buttonAnimationController.dispose();
     _progressAnimationController.dispose();
     super.dispose();
@@ -238,7 +244,6 @@ class _VideoRecordingScreenState extends State<VideoRecordingScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-    
       body: SafeArea(
         child: SizedBox(
           width: MediaQuery.of(context).size.width,
@@ -266,6 +271,13 @@ class _VideoRecordingScreenState extends State<VideoRecordingScreen>
                   children: [
                     if (!_noCamera && _cameraController.value.isInitialized)
                       CameraPreview(_cameraController),
+                    const Positioned(
+                      top: Sizes.size40,
+                      left: Sizes.size20,
+                      child: CloseButton(
+                        color: Colors.white,
+                      ),
+                    ),
                     if (!_noCamera)
                       Positioned(
                         top: Sizes.size10,
