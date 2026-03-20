@@ -15,11 +15,15 @@ class SignUpScreen extends StatelessWidget {
   const SignUpScreen({super.key});
 
   void _onLoginTap(BuildContext context) async {
-    context.push(LogInScreen.routeName);
+    context.push(LogInScreen.routeURL);
   }
 
   void _onAuthButtonTap(BuildContext context, Widget screen) {
-    context.pushNamed(UserNameScreen.routeName);
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const UserNameScreen(),
+      ),
+    );
   }
 
   @override

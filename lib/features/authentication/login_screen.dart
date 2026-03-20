@@ -18,12 +18,7 @@ class LogInScreen extends StatelessWidget {
   }
 
   void _onAuthButtonTap(BuildContext context, String location) {
-    context.push(location);
-    // Navigator.of(context).push(
-    //   MaterialPageRoute(
-    //     builder: (context) => screen,
-    //   ),
-    // );
+    context.pushNamed(location);
   }
 
   @override
