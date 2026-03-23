@@ -1,6 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
+import 'package:tiktok_clone/common/video_config/video_config.dart';
 import 'package:tiktok_clone/constants/gaps.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
 import 'package:tiktok_clone/features/videos/widgets/video_action_button.dart';
@@ -286,23 +288,18 @@ class _VideoPostState extends State<VideoPost>
           Positioned(
             left: 5,
             top: 50,
-            child: _isMute
-                ? IconButton(
-                    onPressed: _onToggleMute,
-                    icon: const FaIcon(
-                      FontAwesomeIcons.volumeXmark,
-                      color: Colors.white,
-                      size: Sizes.size18,
-                    ),
-                  )
-                : IconButton(
-                    onPressed: _onToggleMute,
-                    icon: const FaIcon(
-                      FontAwesomeIcons.volumeHigh,
-                      color: Colors.white,
-                      size: Sizes.size18,
-                    ),
-                  ),
+            child: IconButton(
+              onPressed: () {
+                context.read<VideoConfig>().toggleIsMuted();
+              },
+              icon: FaIcon(
+                context.watch<VideoConfig>().isMuted
+                    ? FontAwesomeIcons.volumeXmark
+                    : FontAwesomeIcons.volumeHigh,
+                color: Colors.white,
+                size: Sizes.size18,
+              ),
+            ),
           ),
         ],
       ),
