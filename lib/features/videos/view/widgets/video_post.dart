@@ -1,16 +1,16 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:provider/provider.dart';
-import 'package:tiktok_clone/common/video_config/video_config.dart';
 import 'package:tiktok_clone/constants/gaps.dart';
 import 'package:tiktok_clone/constants/sizes.dart';
-import 'package:tiktok_clone/features/videos/widgets/video_action_button.dart';
-import 'package:tiktok_clone/features/videos/widgets/video_comments.dart';
+import 'package:tiktok_clone/features/videos/view/widgets/video_action_button.dart';
+import 'package:tiktok_clone/features/videos/view/widgets/video_comments.dart';
+import 'package:tiktok_clone/features/videos/view_models/playback_config_vm.dart';
 import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
-class VideoPost extends StatefulWidget {
+class VideoPost extends ConsumerStatefulWidget {
   final Function onVideoFinished;
   final int index;
 
@@ -21,16 +21,20 @@ class VideoPost extends StatefulWidget {
   });
 
   @override
-  State<VideoPost> createState() => _VideoPostState();
+  VideoPostState createState() => VideoPostState();
 }
 
-class _VideoPostState extends State<VideoPost>
+class VideoPostState extends ConsumerState<VideoPost>
     with SingleTickerProviderStateMixin {
   final Duration _animationDuration = const Duration(milliseconds: 300);
-
   bool _isEllipsis = false;
   bool _isPaused = false;
-  bool _isMute = false;
+
+  /* 
+    mute =>ミュートフラグを動画単位で管理したいので mute フラグを別途作成
+            ミュートボタン押下で、ユーザー設定を直に変えさせたくないため
+  */
+  late bool _isMute = ref.read(playbackConfigProvider).muted;
 
   late final VideoPlayerController _videoPlayerController;
   late final AnimationController _animationController;
@@ -45,6 +49,19 @@ class _VideoPostState extends State<VideoPost>
       ..setLooping(true)
       ..addListener(_onVideoChange);
 
+    // autoplay = false の場合、_isPause フラグを立てて video を初期化したとき停止させる
+    final autoplay = ref.read(playbackConfigProvider).autoplay;
+    if (!autoplay) {
+      _isPaused = true;
+    }
+
+
+    if (_isMute) {
+      _videoPlayerController.setVolume(0);
+    } else {
+      _videoPlayerController.setVolume(1);
+    }
+
     if (kIsWeb) {
       _onToggleMute();
     }
@@ -52,14 +69,19 @@ class _VideoPostState extends State<VideoPost>
     setState(() {});
   }
 
-  void _initVideoButtonAnimation() async {
-    _animationController = AnimationController(
-      vsync: this,
-      lowerBound: 1.0,
-      upperBound: 1.5,
-      value: 1.5,
-      duration: _animationDuration,
-    );
+  void _onVisibilityChanged(VisibilityInfo info) {
+    if (!mounted) return;
+
+    if (info.visibleFraction == 1 &&
+        !_videoPlayerController.value.isPlaying &&
+        !_isPaused) {
+      if (ref.read(playbackConfigProvider).autoplay) {
+        _videoPlayerController.play();
+      }
+    }
+    if (_videoPlayerController.value.isPlaying && info.visibleFraction == 0) {
+      _onTogglePause();
+    }
   }
 
   void _onVideoChange() {
@@ -80,18 +102,6 @@ class _VideoPostState extends State<VideoPost>
       await _videoPlayerController.setVolume(1);
     }
     setState(() {});
-  }
-
-  void _onVisibilityChanged(VisibilityInfo info) {
-    if (!mounted) return;
-    if (info.visibleFraction == 1 &&
-        !_videoPlayerController.value.isPlaying &&
-        !_isPaused) {
-      _videoPlayerController.play();
-    }
-    if (_videoPlayerController.value.isPlaying && info.visibleFraction == 0) {
-      _onTogglePause();
-    }
   }
 
   void _onTogglePause() {
@@ -128,6 +138,16 @@ class _VideoPostState extends State<VideoPost>
 
     // プレイヤーに戻った時、動画が再生中だったらレジューム / 動画を止めていたら止めたままにする
     if (wasPlaying) _onTogglePause();
+  }
+
+  void _initVideoButtonAnimation() async {
+    _animationController = AnimationController(
+      vsync: this,
+      lowerBound: 1.0,
+      upperBound: 1.5,
+      value: 1.5,
+      duration: _animationDuration,
+    );
   }
 
   @override
@@ -289,11 +309,9 @@ class _VideoPostState extends State<VideoPost>
             left: 5,
             top: 50,
             child: IconButton(
-              onPressed: () {
-                context.read<VideoConfig>().toggleIsMuted();
-              },
+              onPressed: _onToggleMute,
               icon: FaIcon(
-                context.watch<VideoConfig>().isMuted
+                _isMute
                     ? FontAwesomeIcons.volumeXmark
                     : FontAwesomeIcons.volumeHigh,
                 color: Colors.white,

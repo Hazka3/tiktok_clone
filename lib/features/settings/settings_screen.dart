@@ -1,18 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:tiktok_clone/common/video_config/video_config.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:tiktok_clone/features/videos/view_models/playback_config_vm.dart';
 
-class SettingsScreen extends StatefulWidget {
+class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
 
   @override
-  State<SettingsScreen> createState() => _SettingsScreenState();
-}
-
-class _SettingsScreenState extends State<SettingsScreen> {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Settings"),
@@ -20,12 +15,26 @@ class _SettingsScreenState extends State<SettingsScreen> {
       body: ListView(
         children: [
           SwitchListTile.adaptive(
-            value: context.watch<VideoConfig>().isMuted,
+            value: ref.watch(playbackConfigProvider).muted,
             onChanged: (value) {
-              context.read<VideoConfig>().toggleIsMuted();
+              ref.read(playbackConfigProvider.notifier).setMuted(value);
             },
-            title: const Text("Auto Mute"),
+            title: const Text("Mute Video"),
             subtitle: const Text("Videos muted by default."),
+          ),
+          SwitchListTile.adaptive(
+            value: ref.watch(playbackConfigProvider).autoplay,
+            onChanged: (value) {
+              ref.read(playbackConfigProvider.notifier).setAutoplay(value);
+            },
+            title: const Text("Autoplay"),
+            subtitle: const Text("Videos will start playing automatically."),
+          ),
+          SwitchListTile(
+            value: false,
+            onChanged: (_) {},
+            title: const Text("Enable notifications"),
+            subtitle: const Text("They will be cute xD."),
           ),
           ListTile(
             title: const Text("Log out"),
