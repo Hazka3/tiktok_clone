@@ -2,11 +2,13 @@ import 'dart:io';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_gallery_saver_plus/image_gallery_saver_plus.dart';
+import 'package:tiktok_clone/features/videos/view_models/video_timeline_vm.dart';
 import 'package:video_player/video_player.dart';
 
-class VideoPreviewScreen extends StatefulWidget {
+class VideoPreviewScreen extends ConsumerStatefulWidget {
   final XFile video;
   final bool isPicked;
 
@@ -17,10 +19,10 @@ class VideoPreviewScreen extends StatefulWidget {
   });
 
   @override
-  State<VideoPreviewScreen> createState() => _VideoPreviewScreenState();
+  ConsumerState<VideoPreviewScreen> createState() => VideoPreviewScreenState();
 }
 
-class _VideoPreviewScreenState extends State<VideoPreviewScreen> {
+class VideoPreviewScreenState extends ConsumerState<VideoPreviewScreen> {
   late final VideoPlayerController _videoPlayerController =
       VideoPlayerController.file(File(widget.video.path));
 
@@ -46,6 +48,10 @@ class _VideoPreviewScreenState extends State<VideoPreviewScreen> {
     );
 
     setState(() {});
+  }
+
+  void _onUploadPressed() {
+    ref.read(videoTimelineProvider.notifier).uploadVideo();
   }
 
   @override
@@ -78,6 +84,12 @@ class _VideoPreviewScreenState extends State<VideoPreviewScreen> {
                     : FontAwesomeIcons.download,
               ),
             ),
+          IconButton(
+            onPressed: _onUploadPressed,
+            icon: ref.watch(videoTimelineProvider).isLoading
+                ? const CircularProgressIndicator.adaptive()
+                : const FaIcon(FontAwesomeIcons.cloudArrowUp),
+          ),
         ],
       ),
       body: _videoPlayerController.value.isInitialized
